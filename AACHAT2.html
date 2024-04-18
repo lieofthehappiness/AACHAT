@@ -165,6 +165,8 @@ function fillTable(x,y) {
 }
 
     function generate() {
+
+        /*
         const tableHtml = document.getElementById("teammate-table").innerHTML;
        
         fetch('/savetable', {
@@ -188,6 +190,15 @@ function fillTable(x,y) {
             alert('Failed to save tTEable.');
         });
         
+*/
+const table = document.getElementById("teammate-table");target="";
+var pdf = new jspdf.jsPDF();
+html2canvas(table).then(function(canvas) {
+    pdf.addImage(canvas.toDataURL('image/jpeg'), 10, 10);
+    pdf.save('mybook.pdf');
+});
+console.log("PDF Generated");
+
 
     }
 

@@ -8,7 +8,7 @@ app.use(express.json());
 
 // 设置根路径的 GET 请求发送到 HTML 页面
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '用URL下載表格.html'));
+    res.sendFile(path.join(__dirname, 'AACHAT2.html'));
 });
 
 // 设置 Express 中间件来提供静态文件
@@ -51,6 +51,7 @@ app.post('/createFolder', (req, res) => {
     });
    
 });
+////////////////////////////
 app.post('/savetable', (req, res) => {
     const pdfData = req.body.pdfData;
     const pdfFileName = 'mytable.html'; 
@@ -65,8 +66,11 @@ app.post('/savetable', (req, res) => {
         }
         res.json({ message: 'PDF saved successfully.' });
     });
+
+
+
 });
- 
+ //////////////////////////////
 // 启动 Express 服务器
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
