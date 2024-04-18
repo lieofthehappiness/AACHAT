@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="./node_modules/jspdf/dist/jspdf.umd.min.js"></script>
+    <script src="./node_modules/html2canvas/dist/html2canvas.min.js"></script>
+    <script src="./foldervreater.js"></script>
+    <script src="./createInputTableToter.js"></script>
+    <script src="./clearthecolorer.js"></script>
+   
+    <title>Fill Table</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            cursor: pointer;
+        }
+
+        th,
+        td {
+            padding: 10px;
+        }
+
+        .teammate-name {
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="folderCreation">
+        <input type="text" id="folderName" placeholder="Enter folder name">
+        <button onclick="createFolder()">Create Folder</button>
+    </div>
+<div id="tableSize">
+    <label for="rows">Rows:</label>
+    <input type="number" id="num-rows" />
+    <label for="cols">Columns:</label>
+    <input type="number" id="num-cols" />
+    <button onclick="createInputTableTo('table-container')">
+        Create Table
+    </button>
+</div>
+<div id="interface1">
+    <h2>Enter Teammate Information</h2>
+    <label for="teammateName">Teammate Name:</label>
+    <input type="text" id="teammateName" />
+    <br />
+    <p>Blocked Cells:</p>
+
+    <div id="table-container"></div>
+
+    <button onclick="addTeammate()">Add Teammate</button>
+</div>
+<div id="interface3" >
+    <h2>Filled Table</h2>
+    <button onclick="fillTable(0,0)">Fill Table</button>
+    <button onclick="generate()">Generate PDF</button>
+    <button onclick="showRandomResult()">Show Random Result</button>
+    <table id="table"></table>
+</div>
+
+<!-- 新增的名字列表區域 -->
+<div id="teammate-list"></div>
+<div id="clearweirdcolor">
+<button onclick="clearthecolor()">clear the color</button>
+</div>
+
+<script>
+    let teammates = [];
+    let blockedCells = [];
+    let tableData = [];
+    let currentSelectedCells = [];
+    let numRows;
+    let numCols;    
+ 
+    function addTeammate() {
+        const nameInput = document.getElementById("teammateName");
+        const name = nameInput.value;
+        if (!name) {
+            alert("請輸入隊友名稱");
+            return;
+        }
+        const blocked = currentSelectedCells;
+        // get the selected cells and set the backgroundColor to white
+        currentSelectedCells.forEach((cell) => {
+            const [col, row] = cell;
+            const table = document.getElementById("teammate-table");
+            table.rows[row].cells[col].style.backgroundColor = "white";
+        });
+        currentSelectedCells = [];
+        teammates.push({ name, blocked });
+        console.log(teammates);
+      //  console.log(typeof teammates[0].blocked[0]);
+        // Clear teammate name input
+        nameInput.value = "";
+        // Update teammate list
+         document.getElementById("teammateName").value = "";//清空input
+         document.getElementById("teammateName").innerHTML = "";//清空畫面文字
+        updateTeammateList();
+    }
+
+    function updateTeammateList() {
+        const teammateListContainer = document.getElementById("teammate-list");
+        teammateListContainer.innerHTML = ""; // Clear previous list
+
+        teammates.forEach((teammate, index) => {
+            const teammateNameElement = document.createElement("div");
+            teammateNameElement.classList.add("teammate-name");
+            teammateNameElement.textContent = teammate.name;
+            teammateNameElement.onclick = function () {
+                // Highlight blocked cells
+                highlightBlockedCells(teammate.blocked);
+            };
+            teammateListContainer.appendChild(teammateNameElement);
+        });
+    }
+
+    function highlightBlockedCells(blockedCells) {
+        const table = document.getElementById("teammate-table");
+
+        table.querySelectorAll("td").forEach((cell) => {
+            cell.style.backgroundColor = ""; // Reset background color
+        });
+
+        blockedCells.forEach(([col, row]) => {
+            table.rows[row].cells[col].style.backgroundColor = "gray";
+        
+        });
+    }
+
+function fillTable(x,y) {
+    const table = document.getElementById("teammate-table");
+    const cell = table.rows[y].cells[x];
+ 
+    for(let i=0;i<teammates.length;i++) {
+        w=true;
+        
+        for(ii=0;ii<teammates[i].blocked.length&&w;ii++) {
+            arr1=([cell.cellIndex, cell.parentElement.rowIndex]);
+            arr2=teammates[i].blocked[ii];
+            w=!(arr1.every((value, index) => value === arr2[index]));
+        } 
+        if(w) {
+            console.log([cell.cellIndex, cell.parentElement.rowIndex]);  
+            cell.innerHTML=teammates[i].name;
+            if(y<numRows-1) fillTable (x,y+1);
+            else if (x<numCols-1) fillTable(x + 1, 0);
+            else if (x ===numCols-1 && y === numRows-1) {
+
+                generate();
+        
+            }
+        }
+        cell.innerHTML="";
+    }
+
+}
+
+    function generate() {
+        const tableHtml = document.getElementById("teammate-table").innerHTML;
+       
+        fetch('/savetable', {
+           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+           },
+          body: JSON.stringify({ tableHtml: tableHtml })
+  })
+        .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to save tTable.');
+        }
+        return response.json();
+        })
+        .then(data => {
+            console.log(data.message); // 显示成功消息
+        })
+        .catch(error => {
+            console.error(error);
+            alert('Failed to save tTEable.');
+        });
+        
+
+    }
+
+    function showRandomResult() {
+        // To be implemented
+    }
+</script>
+</body>
+</html>
+
+
+
