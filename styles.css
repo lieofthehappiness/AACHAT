@@ -1,0 +1,20 @@
+ table {
+    border-collapse: collapse;
+}
+table,
+th,
+td {
+    border: 1px solid black;
+    cursor: pointer;
+}
+th,
+td {
+    padding: 10px;
+}
+.teammate-name {
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+.hidden {
+    display: none; 
+}

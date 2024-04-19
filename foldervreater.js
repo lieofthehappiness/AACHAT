@@ -19,7 +19,7 @@ function createFolder() {
         return response.json();
     })
     .then(data => {
-        alert(data.message); // 显示成功消息
+        console.log(data.message); // 显示成功消息
     })
     .catch(error => {
         console.error(error);

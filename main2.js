@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 
 // 设置 Express 中间件来提供静态文件
 app.use(express.static('D:/AACHAT'));
-let folderName="123";
+let folderName;
 app.post('/createFolder', (req, res) => {
     folderName = req.body.folderName;
     if (!folderName) {
