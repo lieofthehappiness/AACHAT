@@ -14,7 +14,8 @@ function createInputTableTo(id) {
 
     const table = document.createElement("table");
     table.id = "teammate-table";
-
+   
+    
     const tableBody = document.createElement("tbody");
 
     for (let i = 0; i < numRows; i++) {

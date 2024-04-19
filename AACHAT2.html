@@ -97,7 +97,7 @@
         });
         currentSelectedCells = [];
         teammates.push({ name, blocked });
-        console.log(teammates);
+     //   console.log(teammates);
       //  console.log(typeof teammates[0].blocked[0]);
         // Clear teammate name input
         nameInput.value = "";
@@ -149,7 +149,7 @@ function fillTable(x,y) {
             w=!(arr1.every((value, index) => value === arr2[index]));
         } 
         if(w) {
-            console.log([cell.cellIndex, cell.parentElement.rowIndex]);  
+         //   console.log([cell.cellIndex, cell.parentElement.rowIndex]);  
             cell.innerHTML=teammates[i].name;
             if(y<numRows-1) fillTable (x,y+1);
             else if (x<numCols-1) fillTable(x + 1, 0);
@@ -165,42 +165,78 @@ function fillTable(x,y) {
 }
 
     function generate() {
-
-        /*
-        const tableHtml = document.getElementById("teammate-table").innerHTML;
-       
+        var tableHtml= "<table border='1'>";
+        
+        tableHtml+=document.getElementById("teammate-table").innerHTML;
+        tableHtml+="</table>";
+    // var blob = new Blob([tableHtml], { type: "text/html" });
         fetch('/savetable', {
-           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-           },
-          body: JSON.stringify({ tableHtml: tableHtml })
-  })
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ pdfData: tableHtml })
+        })
         .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to save tTable.');
-        }
-        return response.json();
+            if (!response.ok) {
+            throw new Error('Failed to send table data.');
+            }
+           // return response.json();
         })
         .then(data => {
-            console.log(data.message); // 显示成功消息
+           console.log(data.message); // 顯示成功消息
         })
         .catch(error => {
             console.error(error);
-            alert('Failed to save tTEable.');
+           // alert('Failed to send table data.');
         });
+
+    /*
+        var url = URL.createObjectURL(blob);
         
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "table.html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);    
+
+
 */
-const table = document.getElementById("teammate-table");target="";
-var pdf = new jspdf.jsPDF();
-html2canvas(table).then(function(canvas) {
-    pdf.addImage(canvas.toDataURL('image/jpeg'), 10, 10);
-    pdf.save('mybook.pdf');
-});
-console.log("PDF Generated");
+    /*
+        var request = indexedDB.open(document.getElementById("folderName"));
+        request.onerror = function(event) {
+            console.error('IndexedDB error:', event.target.error);
+        };
+        request.onsuccess = function(event) {
+            console.log('IndexedDB opened successfully.');
+            var db = event.target.result;
+
+            // 創建交易
+            var transaction = db.transaction(['teamates'], 'readwrite');
+            var objectStore = transaction.objectStore('teamates');
+
+            // 獲取表格 HTML 內容
+            var tableHtml = document.getElementById("teammate-table").innerHTML;
+
+            // 將表格 HTML 存儲到 IndexedDB 中
+            var request = objectStore.add({ html: tableHtml });
+
+            request.onsuccess = function(event) {
+                console.log('Table HTML saved to IndexedDB.');
+            };
+
+            request.onerror = function(event) {
+                console.error('Error saving table HTML to IndexedDB:', event.target.error);
+            };
+        };
+
+    */
+    };
 
 
-    }
+
+    
 
     function showRandomResult() {
         // To be implemented

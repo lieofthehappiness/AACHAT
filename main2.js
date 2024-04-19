@@ -52,13 +52,16 @@ app.post('/createFolder', (req, res) => {
    
 });
 ////////////////////////////
+let ii=1;
 app.post('/savetable', (req, res) => {
     const pdfData = req.body.pdfData;
-    const pdfFileName = 'mytable.html'; 
+    const pdfFileName = 'mytable'+ii+'.html'; 
 
     // 将PDF数据写入特定文件夹中
     const pdfFolderPath = path.join(__dirname, folderName, 'table'); // 指定目标文件夹路径
+    
     const pdfFilePath = path.join(pdfFolderPath, pdfFileName);
+    ii++;
     fs.writeFile(pdfFilePath, pdfData,'utf8', (err) => {
         if (err) {
             console.error(err);
