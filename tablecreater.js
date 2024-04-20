@@ -1,5 +1,6 @@
 function createInputTableTo(id) {
     document.getElementById('interface1').style.display = 'block';
+    document.getElementById('00').style.display = 'none';
     const tableContainer = document.getElementById(id);
     if (tableContainer.firstChild) {
         tableContainer.removeChild(tableContainer.firstChild);
@@ -26,5 +27,25 @@ function createInputTableTo(id) {
     }
     table.appendChild(tableBody);
     document.getElementById(id).appendChild(table);
+    const cells = document.querySelectorAll("#teammate-table td");
+    cells.forEach(function(cell) {
+    cell.addEventListener("click", function() {
+    var jj=[cell.parentElement.rowIndex,cell.cellIndex];
+   // console.log(isToggling);
+   // console.log("FUCK");
+    if(isToggling) {
+        if (cell.style.backgroundColor === "gray") {
+            cell.style.backgroundColor = "white";
+            currentSelectedCells = currentSelectedCells.filter(function(subArray) {
+                return JSON.stringify(subArray) !== JSON.stringify(jj);
+            });
+        } else {
+            cell.style.backgroundColor = "gray";
+            currentSelectedCells.push(jj);
+        }
+    }
+   // else console.log("FFF");
+    });
+    });
     
 }

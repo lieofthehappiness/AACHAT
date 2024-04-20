@@ -69,11 +69,41 @@ app.post('/savetable', (req, res) => {
         }
         res.json({ message: 'PDF saved successfully.' });
     });
-
-
-
 });
+
  //////////////////////////////
+ 
+ app.post('/showtheresult', (req, res) => {
+    const folderPath = path.join(__dirname, folderName);
+    const tableFolderPath = path.join(folderPath, 'table');
+    fs.readdir(tableFolderPath, (err, files) => {
+        if (err) {
+            console.error('Error reading directory:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        // 篩選出HTML檔案
+        const htmlFiles = files.filter(file => file.endsWith('.html'));
+        // 隨機選擇一個HTML檔案
+        const randomIndex = Math.floor(Math.random() * htmlFiles.length);
+        console.log(randomIndex);
+        const randomHTMLFile = htmlFiles[randomIndex];
+
+        // 讀取HTML檔案的內容並回傳給客戶端
+        fs.readFile(path.join(tableFolderPath, randomHTMLFile), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+           // console.log("MAYBE");
+            // 回傳HTML檔案的內容給客戶端
+            res.send(data);
+        });
+    });
+});
+
+ //////////////////////////////////
 // 启动 Express 服务器
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
