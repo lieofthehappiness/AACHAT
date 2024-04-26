@@ -5,12 +5,12 @@ function blobloblo() {
             const cellInput = table.rows[i].cells[j].querySelector("input");
             const cell = table.rows[i].cells[j];
             if(cellInput.value.trim()!=="") {
-                awaysblockcell.push([i,j]);
+                awaysblockcell.push(cell);
                 cell.innerHTML=cellInput.value.trim();
             }
         }
     }
-    console.log(awaysblockcell);
+  // console.log(awaysblockcell);
     fillTable(0,0);
 }
 

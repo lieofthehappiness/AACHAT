@@ -1,10 +1,12 @@
 function createFolder() {
     const folderName = document.getElementById("folderName").value.trim();
+
     if (!folderName) {
         alert("Please enter a folder name.");
         return;
     }
-
+    document.getElementById("tableSize").style.display=("block");
+    document.getElementById("folderCreation").style.display=("none");
     fetch('/createFolder', {
         method: 'POST',
         headers: {

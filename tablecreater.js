@@ -33,32 +33,33 @@ function createInputTableTo(id) {
 
     cells.forEach(function(cell) {
         cell.addEventListener("click", function() {
-        var jj=[cell.parentElement.rowIndex,cell.cellIndex];
-        console.log(grouping);
     ///////////////////////////////////
         if(grouping) {
-            if (cell.style.backgroundColor==currentColor) {
-                cell.style.backgroundColor = "white";
-                selectedCells = selectedCells.filter(function(subArray) {
-                    return JSON.stringify(subArray) !== JSON.stringify(jj);
-                });
+            if(donottouchcells.includes(cell)) {
+                //console.log(donottouchcells.includes(cell));
+            }
+            else if (selectedCells.includes(cell)) {
+                cell.style.backgroundColor = "";
+                let index = selectedCells.indexOf(cell);
+                selectedCells.splice(index, 1);
+                cell.id='cell';
             } else {
                 cell.style.backgroundColor  = currentColor;
-                selectedCells.push(jj);
+                selectedCells.push(cell);
+                cell.id=iiii;
             }         
         }
-/////////////////////////////////////////到這裡
+/////////////////////////////////////////
     // console.log(isToggling);
     // console.log("FUCK");
         if(isToggling) {
             if (cell.style.backgroundColor === "gray") {
-                cell.style.backgroundColor = "white";
-                currentSelectedCells = currentSelectedCells.filter(function(subArray) {
-                    return JSON.stringify(subArray) !== JSON.stringify(jj);
-                });
+                cell.style.backgroundColor = "";
+                let index = selectedCells.indexOf(cell);
+                selectedCells.splice(index, 1);
             } else {
                 cell.style.backgroundColor = "gray";
-                currentSelectedCells.push(jj);
+                currentSelectedCells.push(cell);
             }
         }
     // else console.log("FFF");
