@@ -11,26 +11,38 @@
     <script src="./Teammateadder.js"></script>
     <script src="./awaysblocker.js"></script>
     <script src="./tablecreater.js"></script>
+    <script src="./generater.js"></script>
+    <script src="./generateUniqueColorer.js"></script>
+    <script src="./endingofthegrouper.js"></script>
     <title>Fill Table</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
+<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
 <div id="00">
     <div id="folderCreation">
         <input type="text" id="folderName" placeholder="Enter folder name">
         <button onclick="createFolder()">Create Folder</button>
     </div>
-<div id="tableSize">
-    <label for="rows">Rows:</label>
-    <input type="number" id="num-rows" min="1" value="1" />
-    <label for="cols">Columns:</label>
-    <input type="number" id="num-cols" min="1" value="1"/>
-    <button onclick="createInputTableTo('table-container')">
-        Create Table
-    </button>
+    <div id="tableSize">
+        <label for="rows">Rows:</label>
+        <input type="number" id="num-rows" min="1" value="1" />
+        <label for="cols">Columns:</label>
+        <input type="number" id="num-cols" min="1" value="1"/>
+        <button onclick="createInputTableTo('table-container')">
+            Create Table
+        </button>
+    </div>
 </div>
+<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
+<div id="selectthegroup" class="hidden">
+    <h2>select the group</h2>
+    <button id="startGrouping">開始群組</button>
+    <button id="confirmGroup">確認群組</button>
+    <button onclick="endingofthegroup()" id="endingofG">結束群組</button>
 </div>
 
+<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
 <div id="interface1" class="hidden">
     <h2>Enter Teammate Information</h2>
     <label for="teammateName">Teammate Name:</label>
@@ -44,12 +56,11 @@
     <button class="hidden" id="adding_teammates">add teammates</button>
     <br />
     <p>Blocked Cells:</p>
-    <div id="table-container"></div>
 </div>
-
+<div id="table-container"></div>
 <div id="teammate-list"></div>
 <div id="clearweirdcolor">
-<button onclick="clearthecolor()">clear the color</button>
+<button onclick="clearthecolor()" class="hidden">clear the color</button>
 </div>
 
 <div id="interface3"  class="hidden">
@@ -60,21 +71,48 @@
 </div>
 
 
-
-
 <script>
-
-let isToggling=false; 
-let teammates = [];
+let grouping = false;//選時間段用
+let selectedCells = [];
+let donottouchcells=[];
+let usedColors = ["#FFFFFF"];
+let currentColor = "";
+let timegroup=[];
+///////////////////////////////////
+let isToggling=false; //選block用
+let teammates = [];//
 let blockedCells = [];
 let tableData = [];
 let awaysblockcell=[];
 let currentSelectedCells = [];
+////////////////////
 let numRows;
 let numCols;    
 let shiftd;
 let shiftu;
 
+/////////////
+document.getElementById("startGrouping").addEventListener("click", function() {
+    grouping = true;
+    selectedCells = [];
+    currentColor = generateUniqueColor();
+    document.getElementById('confirmGroup').style.display = 'block'; 
+    document.getElementById('startGrouping').style.display = 'none';
+    document.getElementById('endingofG').style.display = 'none';
+  //  usedColors.push(currentColor);
+})
+let iiii=0;
+document.getElementById("confirmGroup").addEventListener("click", function() {
+    grouping = false;
+    document.getElementById('confirmGroup').style.display = 'none'; 
+    document.getElementById('startGrouping').style.display = 'block';
+    document.getElementById('endingofG').style.display = 'block';
+    timegroup.push({selectedCells,iiii});
+    donottouchcells.push(selectedCells);
+    iiii++;
+    selectedCells = [];
+});
+///////////
 document.getElementById("toggleButton").addEventListener("click", function() {
     const nameInput = document.getElementById("teammateName");
     const name = nameInput.value;
@@ -84,7 +122,7 @@ document.getElementById("toggleButton").addEventListener("click", function() {
      }
     document.getElementById('adding_teammates').style.display = 'block'; 
     isToggling=true;
-    console.log(isToggling);
+   // console.log(isToggling);
     document.getElementById('toggleButton').style.display = 'none';
 });
 ///////////////////////////////////////////////////
@@ -189,39 +227,7 @@ function fillTable(x,y) {
 
 
 }
-
-    function generate() {
-        var tableHtml= "<table border='1'>";
-        tableHtml+=document.getElementById("teammate-table").innerHTML;
-        tableHtml+="</table>";
-    // var blob = new Blob([tableHtml], { type: "text/html" });
-        fetch('/savetable', {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ pdfData: tableHtml })
-        })
-        .then(response => {
-            if (!response.ok) {
-            throw new Error('Failed to send table data.');
-            }
-           return response.json();
-        })
-        .then(data => {
-           console.log(data.message); // 顯示成功消息
-        })
-        .catch(error => {
-            console.error(error);
-          console.log('Failed to send table data.');
-        });
-    };
-
-
-
-    
     function showRandomResult() {
-      
         fetch('/showtheresult', {
         method: 'POST',
         headers: {
