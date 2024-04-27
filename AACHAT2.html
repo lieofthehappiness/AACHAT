@@ -14,6 +14,8 @@
     <script src="./generater.js"></script>
     <script src="./generateUniqueColorer.js"></script>
     <script src="./endingofthegrouper.js"></script>
+    <script src="./showtheresulter.js"></script>
+    <script src="./TeammateListmaker.js"></script>
     <title>Fill Table</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
@@ -47,18 +49,18 @@
     <h2>Enter Teammate Information</h2>
     <label for="teammateName">Teammate Name:</label>
     <input type="text" id="teammateName" />
-    <h3>班數的上限與下限</h3> 
+    <h3>Upper and lower limits for the number of shifts</h3> 
     <label for="inputX">lower limit:</label>
     <input type="number" id="inputX" name="inputX" min="0" value="0">
     <label for="inputY">upper limit:</label>
-    <input type="number" id="inputY" name="inputY" min="1" value="1">
+    <input type="number" id="inputY" name="inputY" min="1" value="100">
     <button id="toggleButton" >going to select the blocked</button>
     <button class="hidden" id="adding_teammates">add teammates</button>
     <br />
     <p>Blocked Cells:</p>
 </div>
 <div id="table-container"></div>
-<div id="showthepeople">
+<div id="showthepeople" class="hidden">
     <h2>your teamates</h2>
     <div id="teammate-list"></div>
 </div>
@@ -113,7 +115,7 @@ document.getElementById("confirmGroup").addEventListener("click", function() {
     document.getElementById('confirmGroup').style.display = 'none'; 
     document.getElementById('startGrouping').style.display = 'block';
     document.getElementById('endingofG').style.display = 'block';
-    timegroup.push({selectedCells,iiii});
+    timegroup.push(selectedCells);
     donottouchcells.push.apply(donottouchcells,selectedCells);
     iiii++;
     selectedCells = [];
@@ -123,7 +125,7 @@ document.getElementById("toggleButton").addEventListener("click", function() {
     const nameInput = document.getElementById("teammateName");
     const name = nameInput.value;
     if (!name) {
-         alert("請輸入隊友名稱");
+         alert("please enter the name ");
         return;
      }
     document.getElementById('adding_teammates').style.display = 'block'; 
@@ -137,6 +139,7 @@ document.getElementById("adding_teammates").addEventListener("click", function()
         isToggling=false;
         document.getElementById('toggleButton').style.display='block'; 
         document.getElementById('interface3').style.display='block'; 
+        document.getElementById('showthepeople').style.display='block'; 
         document.getElementById('adding_teammates').style.display='none'; 
         const name = nameInput.value;
         shiftd=document.getElementById("inputX").value;
@@ -161,38 +164,6 @@ document.getElementById("adding_teammates").addEventListener("click", function()
 });
 ////////////////////////////////////////////
 
-
-
-
-    function updateTeammateList() {
-        const abutton=document.getElementById("alittlebutton");
-        abutton.style.display="block";
-        const teammateListContainer = document.getElementById("teammate-list");
-        teammateListContainer.innerHTML = ""; // Clear previous list
-        teammates.forEach((teammate, index) => {
-            const teammateNameElement = document.createElement("div");
-            teammateNameElement.classList.add("teammate-name");
-            teammateNameElement.textContent ="name:"+teammate.name+" shift:"+teammate.shiftd+"\~"+teammate.shiftu;
-            teammateNameElement.onclick = function () {
-                // Highlight blocked cells
-                highlightBlockedCells(teammate.blocked);
-            };
-            teammateListContainer.appendChild(teammateNameElement);
-        });
-    }
-    function highlightBlockedCells(blockedCells) {
-        const table = document.getElementById("teammate-table");
-        table.querySelectorAll("td").forEach((cell) => {
-            cell.style.backgroundColor = ""; // Reset background color
-        });
-        blockedCells.forEach((cell) => {
-            cell.style.backgroundColor="gray";
-        })
-     //   blockedCells.forEach(([row, col]) => {
-           // table.rows[row].cells[col].style.backgroundColor = "gray";
-       // });
-    }
-
 function fillTable(x,y) {
     const table = document.getElementById("teammate-table");
     const cell = table.rows[x].cells[y];
@@ -212,6 +183,16 @@ function fillTable(x,y) {
                 w=false;
                 continue;
             } 
+            var anumber=parseInt(cell.id, 10);
+            if (isNaN(anumber)) w=true;
+            else {
+                timegroup[anumber].forEach(function(cell) {
+                    w=(cell.innerHTML!=teammates[i].name&&w);    
+                })
+                
+            }
+            console.log(w);
+            if(!w) continue; 
             w=(w&&!teammates[i].blocked.includes(cell));
             if(w) {
             //   console.log([cell.cellIndex, cell.parentElement.rowIndex]);  
@@ -227,30 +208,8 @@ function fillTable(x,y) {
             cell.innerHTML=""; 
         }
     }
-
-
 }
-    function showRandomResult() {
-        fetch('/showtheresult', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to show.');
-            }
-            return response.text();
-        })
-        .then(data => {
-            document.getElementById("table").innerHTML = data;
-        })
-        .catch(error => {
-            console.error(error);
-            console.log('Failed to showw.');
-        });
-    }
+
 </script>
 </body>
 </html>
