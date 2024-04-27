@@ -1,0 +1,3 @@
+cd D:
+cd AACHAT
+cd main2
