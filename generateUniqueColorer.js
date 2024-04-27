@@ -7,5 +7,6 @@
                 color += letters[Math.floor(Math.random() * 16)];
             }
         } while (usedColors.includes(color)); // 檢查是否已使用過該顏色
+        
         return color;
     }
