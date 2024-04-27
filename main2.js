@@ -14,6 +14,7 @@ app.get('/', (req, res) => {
 // 设置 Express 中间件来提供静态文件
 app.use(express.static('D:/AACHAT'));
 let folderName;
+let folderpath;
 app.post('/createFolder', (req, res) => {
     folderName = req.body.folderName;
     if (!folderName) {
@@ -21,16 +22,16 @@ app.post('/createFolder', (req, res) => {
     }
 
     // 创建文件夹路径
-    const folderPath = path.join(__dirname, folderName);
+    folderpath = path.join(__dirname,"allthetable", folderName);
 
     // 创建文件夹
-    fs.mkdir(folderPath, { recursive: true }, (err) => {
+    fs.mkdir(folderpath, { recursive: true }, (err) => {
         if (err) {
             console.error(err);
             return res.status(500).json({ error: 'Failed to create folder.' });
         }
 
-     const teammatesFolderPath = path.join(folderPath, 'teammates');
+     const teammatesFolderPath = path.join(folderpath, 'teammates');
         fs.mkdir(teammatesFolderPath, { recursive: true }, (teammatesErr) => {
             if (teammatesErr) {
                 console.error(teammatesErr);
@@ -38,7 +39,7 @@ app.post('/createFolder', (req, res) => {
             }
 
             // 创建子文件夹 table
-            const tableFolderPath = path.join(folderPath, 'table');
+            const tableFolderPath = path.join(folderpath, 'table');
             fs.mkdir(tableFolderPath, { recursive: true }, (tableErr) => {
                 if (tableErr) {
                     console.error(tableErr);
@@ -56,11 +57,8 @@ let ii=1;
 app.post('/savetable', (req, res) => {
     const pdfData = req.body.pdfData;
     const pdfFileName = 'mytable'+ii+'.html'; 
-
-    // 将PDF数据写入特定文件夹中
-    const pdfFolderPath = path.join(__dirname, folderName, 'table'); // 指定目标文件夹路径
-    
-    const pdfFilePath = path.join(pdfFolderPath, pdfFileName);
+    const pdfFilePath = path.join(folderpath,"table", pdfFileName);
+  //  console.log(folderpath);
     ii++;
     fs.writeFile(pdfFilePath, pdfData,'utf8', (err) => {
         if (err) {
@@ -74,8 +72,8 @@ app.post('/savetable', (req, res) => {
  //////////////////////////////
  
  app.post('/showtheresult', (req, res) => {
-    const folderPath = path.join(__dirname, folderName);
-    const tableFolderPath = path.join(folderPath, 'table');
+    const tableFolderPath = path.join(folderpath, 'table');
+  //  console.log(tableFolderPath);
     fs.readdir(tableFolderPath, (err, files) => {
         if (err) {
             console.error('Error reading directory:', err);
@@ -86,8 +84,8 @@ app.post('/savetable', (req, res) => {
         const htmlFiles = files.filter(file => file.endsWith('.html'));
         // 隨機選擇一個HTML檔案
         const randomIndex = Math.floor(Math.random() * htmlFiles.length);
-        console.log(randomIndex);
-        const randomHTMLFile = htmlFiles[randomIndex];
+      //  console.log(randomIndex);
+       const randomHTMLFile = htmlFiles[randomIndex];
 
         // 讀取HTML檔案的內容並回傳給客戶端
         fs.readFile(path.join(tableFolderPath, randomHTMLFile), 'utf8', (err, data) => {
