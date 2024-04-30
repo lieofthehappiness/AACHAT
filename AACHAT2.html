@@ -21,45 +21,66 @@
 </head>
 <body background="picture1.png">
 <!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
-<div id="00">
+<div id="00" class="container00">
     <div id="folderCreation">
-        <input type="text" id="folderName" placeholder="Enter folder name">
-        <button onclick="createFolder()">Create Folder</button>
+        <input type="text" id="folderName" placeholder="Enter folder name" class="folderinput"><br>
+        <button onclick="createFolder()" class="folderbutton">Create Folder</button>
     </div>
     <div id="tableSize" class="hidden">
-        <label for="rows">Rows:</label>
-        <input type="number" id="num-rows" min="1" value="1" />
-        <label for="cols">Columns:</label>
-        <input type="number" id="num-cols" min="1" value="1"/>
-        <button onclick="createInputTableTo('table-container')">
+        <label for="rows" class="rowlabel">Rows:</label>
+        <input type="number" id="num-rows" min="1" value="1" class="roww"><br>
+        <label for="cols" class="collabel">Columns:</label>
+        <input type="number" id="num-cols" min="1" value="1" class="coll"><br>
+        <button onclick="createInputTableTo('table-container')" class="creattablebutton">
             Create Table
         </button>
     </div>
 </div>
 <!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
-<div id="selectthegroup" class="hidden">
+<div id="selectthegroup" class="hidden selectthegroupcontainer">
     <h2>select the group</h2>
     <button id="startGrouping">start a new group</button>
-    <button id="confirmGroup">check</button>
-    <button onclick="endingofthegroup()" id="endingofG">next step</button>
+    <button id="confirmGroup" >check</button>
+    <button onclick="endingofthegroup()" id="endingofG">next step</button><br>
+    <div id="table-container"></div>
 </div>
 
 <!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
 <div id="interface1" class="hidden">
-    <h2>Enter Teammate Information</h2>
-    <label for="teammateName">Teammate Name:</label>
-    <input type="text" id="teammateName" />
-    <h3>Upper and lower limits for the number of shifts</h3> 
-    <label for="inputX">lower limit:</label>
-    <input type="number" id="inputX" name="inputX" min="0" value="0">
-    <label for="inputY">upper limit:</label>
-    <input type="number" id="inputY" name="inputY" min="1" value="100">
-    <button id="toggleButton" >going to select the blocked</button>
-    <button class="hidden" id="adding_teammates">add teammates</button>
-    <br />
+    <h6> </h6>
+    <div class="hhh transparent1 teamateinformation">
+        <h3 class="disleft">Enter Teammate Information</h3>
+        <div >
+            <label for="teammateName" class="disleft">Teammate Name:</label>
+            <input type="text" id="teammateName" class="left" width="50%" >
+        </div>
+
+    </div>
+    <div class="hhh">
+        <h6> </h6>
+        <h3 class="disleft">Upper and lower limits for the number of shifts</h3>
+        <div class="disleft">
+            <label for="inputX">lower limit:</label>
+            <input type="number" id="inputX" name="inputX" min="0" value="0" class=" left"><br>
+            <label for="inputY" >upper limit:</label>
+            <input type="number" id="inputY" name="inputY" min="1" value="100" class=" left"><br>
+        </div>
+
+        <button id="toggleButton" class="disdown disleft">going to select the blocked</button>
+        <button class="hidden disdown disleft" id="adding_teammates">add teammates</button>
+        <br/>
+           
+    
+     </div>
+
+
+
+
     <p>Blocked Cells:</p>
+    <div id="another-table"></div>
+    
 </div>
-<div id="table-container"></div>
+
 <div id="showthepeople" class="hidden">
     <h2>your teamates</h2>
     <div id="teammate-list"></div>
@@ -68,11 +89,10 @@
 <div id="clearweirdcolor">
 <button onclick="clearthecolor()" class="hidden" id="alittlebutton">clear the color</button>
 </div>
-
 <div id="interface3"  class="hidden">
     <h2>Filled Table</h2>
     <button onclick="blobloblo()">Fill Table</button>
-    <button onclick="showRandomResult()">Show Random Result</button>
+    <button onclick="showRandomResult()" id="another" class="hidden">Show Random Result</button>
     <table id="table"></table>
 </div>
 
@@ -83,7 +103,7 @@
 let grouping = false;//選時間段用
 let selectedCells = [];
 let donottouchcells=[];
-let usedColors = ["#FFFFFF"];//記得改//記得改得//記得改//記得改//記得改//記得改//記得改記得改
+let usedColors = ["#FFFFFF"];
 let currentColor = "";
 let timegroup=[];
 ///////////////////////////////////
@@ -104,7 +124,7 @@ document.getElementById("startGrouping").addEventListener("click", function() {
     grouping = true;
     selectedCells = [];
     currentColor = generateUniqueColor();
-    document.getElementById('confirmGroup').style.display = 'block'; 
+    document.getElementById('confirmGroup').style.display = 'inline-block'; 
     document.getElementById('startGrouping').style.display = 'none';
     document.getElementById('endingofG').style.display = 'none';
   //  usedColors.push(currentColor);
@@ -113,8 +133,8 @@ let iiii=0;
 document.getElementById("confirmGroup").addEventListener("click", function() {
     grouping = false;
     document.getElementById('confirmGroup').style.display = 'none'; 
-    document.getElementById('startGrouping').style.display = 'block';
-    document.getElementById('endingofG').style.display = 'block';
+    document.getElementById('startGrouping').style.display = 'inline-block';
+    document.getElementById('endingofG').style.display = 'inline-block';
     timegroup.push(selectedCells);
     donottouchcells.push.apply(donottouchcells,selectedCells);
     iiii++;
@@ -128,10 +148,11 @@ document.getElementById("toggleButton").addEventListener("click", function() {
          alert("please enter the name ");
         return;
      }
+    document.getElementById('toggleButton').style.display = 'none';
     document.getElementById('adding_teammates').style.display = 'block'; 
     isToggling=true;
    // console.log(isToggling);
-    document.getElementById('toggleButton').style.display = 'none';
+    
 });
 ///////////////////////////////////////////////////
 document.getElementById("adding_teammates").addEventListener("click", function() {
@@ -191,7 +212,7 @@ function fillTable(x,y) {
                 })
                 
             }
-            console.log(w);
+           // console.log(w);
             if(!w) continue; 
             w=(w&&!teammates[i].blocked.includes(cell));
             if(w) {
@@ -208,8 +229,11 @@ function fillTable(x,y) {
             cell.innerHTML=""; 
         }
     }
+    if(x==0&&y==0) anotherblockshoudbeshow();
 }
-
+function anotherblockshoudbeshow() {
+    document.getElementById("another").style.display="block";
+}
 </script>
 </body>
 </html>

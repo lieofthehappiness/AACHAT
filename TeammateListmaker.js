@@ -20,7 +20,10 @@
             cell.style.backgroundColor = ""; // Reset background color
         });
         blockedCells.forEach((cell) => {
-            cell.style.backgroundColor="gray";
+            var index = currentSelectedCells.indexOf(cell);
+                cell.style.backgroundColor = "red";
+                if(index==-1)currentSelectedCells.push(cell);
+            
         })
      //   blockedCells.forEach(([row, col]) => {
            // table.rows[row].cells[col].style.backgroundColor = "gray";

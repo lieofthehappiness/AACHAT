@@ -1,43 +1,173 @@
 body {
-    font-family:Comic Sans MS, Comic Sans, cursive;
+    font-family: Comic Sans MS, Comic Sans, cursive;
 }
+
 button {
-    font-family:Comic Sans MS, Comic Sans, cursive !important;
+    font-family: Comic Sans MS, Comic Sans, cursive !important;
+    border: none;
 }
+
 input {
-    font-family:Comic Sans MS, Comic Sans, cursive !important;
+    font-family: Comic Sans MS, Comic Sans, cursive !important;
+    text-align: center;
+    width: 100%; /* Adjust input width */
+    box-sizing: border-box; /* Ensure padding is included in width */
+    margin-top: 1%;
+    margin-bottom:1%;
+    margin-left: 1%;
+    margin-right: 1%;
 }
+
+input::placeholder {
+    text-align: center;
+}
+
 table {
     border-collapse: collapse;
 }
+
 table,
 th,
 td {
     border: 1px solid black;
     cursor: pointer;
 }
+
 th,
 td {
-    padding: 10px;
+   /* Adjust padding */
+   margin: 2%;
 }
 
 html {
     filter: invert(100%);
 }
+
 .teammate-name {
     cursor: pointer;
-    margin-bottom: 5px;
+    margin-bottom: 1%; /* Adjust margin */
 }
+
 .hidden {
     display: none; 
 }
 
 .transparent0 {
-    background-color: rgba(255, 255, 255, 0);
+    background-color: rgba(0, 0, 0, 0);
 }
+
 .transparent1 {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(0, 0, 0, 0.2);
 }
+
 .transparent2 {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.container00 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.folderinput {
+    padding: 1%;
+    font-size: 1em; /* Adjust font size */
+    width: 90%; /* Adjust width */
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.folderbutton {
+    margin-top: 1%; /* Adjust margin */
+    padding: 1% 2%;
+    font-size: 1em; /* Adjust font size */
+    width: 90%; /* Adjust width */
+    display: inline-block;
+    vertical-align: middle;
+    border: none;
+}
+
+.rowlabel {
+    display: inline-block;
+    width: 20%; /* Adjust width */
+    text-align: right;
+    margin-right: 1%; /* Adjust margin */
+    font-size: 1em; /* Adjust font size */
+}
+
+.roww {
+    vertical-align: middle;
+    width: 70%;
+    font-size: 1em; /* Adjust font size */
+}
+
+.collabel {
+    display: inline-block;
+    width: 20%; /* Adjust width */
+    text-align: right;
+    margin-right: 1%; /* Adjust margin */
+    font-size: 1em; /* Adjust font size */
+}
+
+.coll {
+    vertical-align: middle; 
+    width: 70%;
+    font-size: 1em; /* Adjust font size */
+}
+
+.creattablebutton {
+    font-size: 1em; /* Adjust font size */
+    width: 90%; /* Adjust width */
+    border: none; 
+    vertical-align: middle;
+    float: right;
+}
+
+.selectthegroupcontainer {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.gototheright {
+    position: relative;
+    position: absolute;
+    right: 0;
+}
+.gototheleft {
+    position: relative;
+    position: absolute;
+    left: 0;
+}
+.teamateinformation {
+    width: 60%;
+    height: auto; /* Adjust height */
+}
+
+.hhh {
+    background-color: rgba(38, 41, 26, 0.2);
+    width: 50%;
+  
+}
+
+.hhh input {
+    width: 60%;
+    
+}
+.talecontainerer {
+    width: 100vw; /* 設置頁面寬度為視窗寬度 */
+    height: 100vh; /* 設置頁面高度為視窗高度 */
+    overflow: auto; /* 啟用頁面滾動 */
+}
+.disleft {
+    margin-left: 2%;
+}
+.disdown {
+    margin-bottom: 1%;
 }

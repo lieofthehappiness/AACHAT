@@ -21,10 +21,32 @@ function createInputTableTo(id) {
             const cell = document.createElement("td");
             const input = document.createElement("input");
             input.type = "text";
+            input.style.width = "20px";
+            input.addEventListener("input", function() {
+                adjustWidth(this);
+            });
             cell.appendChild(input); 
             row.appendChild(cell);
         }
         tableBody.appendChild(row);
+    }
+
+     function adjustWidth(input) {
+        const tableRows = document.querySelectorAll("#teammate-table tbody tr");
+        const columnIndex = Array.from(input.parentElement.parentElement.children).indexOf(input.parentElement);
+        let maxWidth = 0;
+        tableRows.forEach(row => {
+            const currentInput = row.children[columnIndex].querySelector("input");
+            const currentWidth = currentInput.value.length + 1;
+            if (currentWidth > maxWidth) {
+                maxWidth = currentWidth;
+            }
+        });
+        tableRows.forEach(row => {
+            const currentInput = row.children[columnIndex].querySelector("input");
+            currentInput.style.width = (maxWidth * 8) + 'px'; // 假设每个字符大约占 8 像素的宽度
+           
+        });
     }
     table.appendChild(tableBody);
     document.getElementById(id).appendChild(table);
@@ -53,14 +75,17 @@ function createInputTableTo(id) {
     // console.log(isToggling);
     // console.log("FUCK");
         if(isToggling) {
-            if (cell.style.backgroundColor === "gray") {
+            if (cell.style.backgroundColor == "red") {
+                console.log("de");
                 cell.style.backgroundColor = "";
-                let index = selectedCells.indexOf(cell);
-                selectedCells.splice(index, 1);
+               var index = currentSelectedCells.indexOf(cell);
+               currentSelectedCells.splice(index, 1);
             } else {
-                cell.style.backgroundColor = "gray";
+                console.log("K");
+                cell.style.backgroundColor = "red";
                 currentSelectedCells.push(cell);
             }
+            console.log(currentSelectedCells);
         }
     // else console.log("FFF");
         });

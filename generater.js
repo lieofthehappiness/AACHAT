@@ -2,6 +2,14 @@
         var tableHtml= "<table border='1'>";
         tableHtml+=document.getElementById("teammate-table").innerHTML;
         tableHtml+="</table>";
+        let checking=true;
+        teammates.some(element => {
+        //    console.log(element.shiftnow+" "+element.shiftd);
+            if(element.shiftnow<element.shiftd) checking=false;
+            return checking==false;
+        });
+        if(!checking) return;
+       // console.log("success");
     // var blob = new Blob([tableHtml], { type: "text/html" });
         fetch('/savetable', {
         method: 'POST',
