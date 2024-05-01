@@ -1,0 +1,228 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./node_modules/jspdf/dist/jspdf.umd.min.js"></script>
+    <script src="./node_modules/html2canvas/dist/html2canvas.min.js"></script>
+    <script src="../othercode/foldervreater.js"></script>
+    <script src="../othercode/clearthecolorer.js"></script>
+    <script src="../othercode/Teammateadder.js"></script>
+    <script src="../othercode/awaysblocker.js"></script>
+    <script src="../othercode/tablecreater.js"></script>
+    <script src="../othercode/generater.js"></script>
+    <script src="../othercode/generateUniqueColorer.js"></script>
+    <script src="../othercode/endingofthegrouper.js"></script>
+    <script src="../othercode/showtheresulter.js"></script>
+    <script src="../othercode/TeammateListmaker.js"></script>
+    <script src="../othercode/downloadallhtmler.js"></script>
+    <script src="../othercode/fillthetable.js"></script>
+    <title>Fill Table</title>
+    <link rel="stylesheet" type="text/css" href="../othercode/styles.css">
+</head>
+<body background="../othercode/picture1.png">
+<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
+<div id="00" class="container00" style="display: none;">
+    <div id="folderCreation" style="display: none;">
+        <input type="text" id="folderName" placeholder="Enter folder name" class="folderinput"><br>
+        <button onclick="createFolder()" class="folderbutton">Create Folder</button>
+    </div>
+    <div id="tableSize" class="hidden" style="display: block;">
+        <label for="rows" class="rowlabel">Rows:</label>
+        <input type="number" id="num-rows" min="1" value="1" class="roww"><br>
+        <label for="cols" class="collabel">Columns:</label>
+        <input type="number" id="num-cols" min="1" value="1" class="coll"><br>
+        <button onclick="createInputTableTo('table-container')" class="creattablebutton">
+            Create Table
+        </button>
+    </div>
+</div>
+<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
+<div id="selectthegroup" class="hidden selectthegroupcontainer" style="display: none;">
+    <h2>select the group</h2>
+    <button id="startGrouping">start a new group</button>
+    <button id="confirmGroup" style="display: none;">check</button>
+    <button onclick="endingofthegroup()" id="endingofG">next step</button><br>
+    
+</div>
+
+<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
+<div id="interface1" class="hidden" style="display: block;">
+    <h6> </h6>
+    <div class="hhh transparent1 teamateinformation">
+        <h3 class="disleft">Enter Teammate Information</h3>
+        <div>
+            <label for="teammateName" class="disleft">Teammate Name:</label>
+            <input type="text" id="teammateName" class="left" width="50%">
+        </div>
+
+    </div>
+    <div class="hhh">
+        <h6> </h6>
+        <h3 class="disleft">Upper and lower limits for the number of shifts</h3>
+        <div class="disleft">
+            <label for="inputX">lower limit:</label>
+            <input type="number" id="inputX" name="inputX" min="0" value="0" class=" left"><br>
+            <label for="inputY">upper limit:</label>
+            <input type="number" id="inputY" name="inputY" min="1" value="100" class=" left"><br>
+        </div>
+
+        <button id="toggleButton" class="disdown disleft" style="display: block;">going to select the blocked</button>
+        <button class="hidden disdown disleft" id="adding_teammates" style="display: none;">add teammates</button>
+        <br>
+           
+    
+     </div>
+
+    <p>Blocked Cells:</p>
+    
+</div>
+<div id="download">
+    <div id="another-table"><div id="table-container"><table id="teammate-table"><tbody><tr><td style="background-color: white;"><input type="text" style="width: 100%;"></td><td style="background-color: white;"><input type="text" style="width: 100%;"></td><td style="background-color: white;"><input type="text" style="width: 100%;"></td><td style="background-color: white;"><input type="text" style="width: 100%;"></td><td style="background-color: white;"><input type="text" style="width: 100%;"></td><td style="background-color: white;"><input type="text" style="width: 100%;"></td><td style="background-color: white;"><input type="text" style="width: 100%;"></td><td style="background-color: white;"><input type="text" style="width: 100%;"></td></tr></tbody></table></div></div>
+    <div id="showthepeople" class="hidden hhh teamatesbackground" style="display: block;">
+        <div class="disleft disdown">
+            <h2>your teamates</h2>
+            <div id="teammate-list"><div class="teammate-name">name:8 shift:0~100</div><div class="teammate-name">name:7 shift:0~100</div></div>     
+        </div>
+    </div>
+</div>
+
+
+<div id="clearweirdcolor">
+<button onclick="clearthecolor()" class="hidden" id="alittlebutton" style="display: block;">clear the color</button>
+</div>
+<div id="interface3" class="hidden" style="display: block;">
+    <h2>Filled Table</h2>
+    <button onclick="blobloblo()" id="fill-table">Fill Table</button>
+    <button onclick="showRandomResult()" id="another" class="hidden">Show Random Result</button>
+    <table id="table"></table>
+</div>
+<button id="gg">ineedto check</button>
+
+<script>
+
+//////
+let grouping = false;//選時間段用
+let selectedCells = [];
+let donottouchcells=[];
+let usedColors = ["#FFFFFF"];
+let currentColor = "";
+let timegroup=[];
+///////////////////////////////////
+let isToggling=false; //選block用
+let teammates = [];//
+let blockedCells = [];
+let tableData = [];
+let awaysblockcell=[];
+let currentSelectedCells = [];
+////////////////////
+let numRows;
+let numCols;    
+let shiftd;
+let shiftu;
+document.getElementById("gg").addEventListener("click", function() {
+   // var jsonData = JSON.stringify(teammates);
+    fetch('/check', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ pdfData: teammates })
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Failed to send teammates .');
+            }
+           return response.json();
+        })
+        .then(data => {
+           console.log(data.message); // 顯示成功消息
+        })
+        .catch(error => {
+            console.error(error);
+          console.log('Failed to send teammates .');
+        });
+})
+/////////////
+document.getElementById("startGrouping").addEventListener("click", function() {
+    grouping = true;
+    selectedCells = [];
+    currentColor = generateUniqueColor();
+    document.getElementById('confirmGroup').style.display = 'inline-block'; 
+    document.getElementById('startGrouping').style.display = 'none';
+    document.getElementById('endingofG').style.display = 'none';
+  //  usedColors.push(currentColor);
+})
+let iiii=0;
+document.getElementById("confirmGroup").addEventListener("click", function() {
+    grouping = false;
+    document.getElementById('confirmGroup').style.display = 'none'; 
+    document.getElementById('startGrouping').style.display = 'inline-block';
+    document.getElementById('endingofG').style.display = 'inline-block';
+    timegroup.push(selectedCells);
+    donottouchcells.push.apply(donottouchcells,selectedCells);
+    iiii++;
+    selectedCells = [];
+});
+///////////
+document.getElementById("toggleButton").addEventListener("click", function() {
+    const nameInput = document.getElementById("teammateName");
+    const name = nameInput.value;
+    if (!name) {
+         alert("please enter the name ");
+        return;
+     }
+    document.getElementById('toggleButton').style.display = 'none';
+    document.getElementById('adding_teammates').style.display = 'block'; 
+    isToggling=true;
+   // console.log(isToggling);
+    
+});
+///////////////////////////////////////////////////
+document.getElementById("adding_teammates").addEventListener("click", function() {
+    const nameInput = document.getElementById("teammateName");
+        isToggling=false;
+        document.getElementById('toggleButton').style.display='block'; 
+        document.getElementById('interface3').style.display='block'; 
+        document.getElementById('showthepeople').style.display='block'; 
+        document.getElementById('adding_teammates').style.display='none'; 
+        const name = nameInput.value;
+        shiftd=document.getElementById("inputX").value;
+        shiftu=document.getElementById("inputY").value;
+        let shiftnow=0;
+        // get the selected cells and set the backgroundColor to white
+        currentSelectedCells.forEach((cell) => {
+            cell.style.backgroundColor = "";
+        });
+        const blocked = currentSelectedCells;
+        currentSelectedCells = [];
+        teammates.push({ name, blocked ,shiftd,shiftu,shiftnow});
+      //  console.log(teammates);
+      //  console.log(typeof teammates[0].blocked[0]);
+        // Clear teammate name input
+        nameInput.value = "";
+        // Update teammate list
+         document.getElementById("teammateName").value = "";//清空input
+         document.getElementById("teammateName").innerHTML = "";//清空畫面文字
+        updateTeammateList();
+});
+////
+var peopleDivs = document.querySelectorAll('.teammate-table');
+
+peopleDivs.forEach(function(div) {
+    div.addEventListener('click', function() {
+        teammateNameElement.onclick = function () {
+                highlightBlockedCells(teammate.blocked);
+            };
+    });
+});
+////////////////////////////////////////////
+function anotherblockshoudbeshow() {
+    document.getElementById("another").style.display="block";
+}
+
+</script>
+
+
+
+
+
+</body></html>

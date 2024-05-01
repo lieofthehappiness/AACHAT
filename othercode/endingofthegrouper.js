@@ -7,7 +7,7 @@ function endingofthegroup() {
     container2.appendChild(container1);
     document.getElementById('selectthegroup').style.display = 'none'; 
     clearthecolor();
-    console.log(timegroup);
+   // console.log(timegroup);
 }
 
 

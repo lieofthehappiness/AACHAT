@@ -2,13 +2,13 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const path = require('path');
-
+let ii=1;
 // 设置 Express 中间件来解析请求体中的 JSON 数据
 app.use(express.json());
 
 // 设置根路径的 GET 请求发送到 HTML 页面
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'AACHAT2.html'));
+    res.sendFile(path.join(__dirname,'AACHAT' ,'AACHAT2.html'));
 });
 
 // 设置 Express 中间件来提供静态文件
@@ -16,6 +16,7 @@ app.use(express.static('D:/AACHAT'));
 let folderName;
 let folderpath;
 app.post('/createFolder', (req, res) => {
+    ii=1;
     folderName = req.body.folderName;
     if (!folderName) {
         return res.status(400).json({ error: 'Folder name is required.' });
@@ -30,43 +31,35 @@ app.post('/createFolder', (req, res) => {
             console.error(err);
             return res.status(500).json({ error: 'Failed to create folder.' });
         }
-
-     const teammatesFolderPath = path.join(folderpath, 'teammates');
-        fs.mkdir(teammatesFolderPath, { recursive: true }, (teammatesErr) => {
-            if (teammatesErr) {
-                console.error(teammatesErr);
-                return res.status(500).json({ error: 'Failed to create teammates folder.' });
+                     // 创建子文件夹 table
+        const tableFolderPath = path.join(folderpath, 'table');
+        fs.mkdir(tableFolderPath, { recursive: true }, (tableErr) => {
+            if (tableErr) {
+                console.error(tableErr);
+                return res.status(500).json({ error: 'Failed to create table folder.' });
             }
 
-            // 创建子文件夹 table
-            const tableFolderPath = path.join(folderpath, 'table');
-            fs.mkdir(tableFolderPath, { recursive: true }, (tableErr) => {
-                if (tableErr) {
-                    console.error(tableErr);
-                    return res.status(500).json({ error: 'Failed to create table folder.' });
-                }
-
-                res.json({ message: 'Folder and subfolders created successfully.' });
-            });
-         });
+            res.json({ message: 'Folder and subfolders created successfully.' });
+        });
     });
    
 });
 ////////////////////////////
-let ii=1;
+
 let g=1;
 app.post('/savetable', (req, res) => {
     const pdfData = req.body.pdfData;
     const pdfFileName = 'mytable'+ii+'.html'; 
+    ii++;
     const pdfFilePath = path.join(folderpath,"table", pdfFileName);
   //  console.log(folderpath);
     let notimportantnumber=1;
     if(ii>100) {
         notimportantnumber=Math.floor(Math.random() * 2);
     }
-    console.log(notimportantnumber+"  "+ii+" "+g);
+   console.log(notimportantnumber+"  "+ii);
    
-    if(notimportantnumber) {
+   // if(notimportantnumber==1) {
         fs.writeFile(pdfFilePath, pdfData,'utf8', (err) => {
             if (err) {
                 console.error(err);
@@ -74,15 +67,15 @@ app.post('/savetable', (req, res) => {
             }
             if(ii>100) {
 
-                const  folderPPath=path.join(folderpath, folderName);
-                fs.readdir(folderPPath, (err, files) => {
+                 const pf=path.join(folderpath,"table");
+                fs.readdir(pf, (err, files) => {
                     if (err) {
                         console.error('Error reading folder:', err);
                         return;
                     }
                     // 过滤出 HTML 文件
                     const htmlFiles = files.filter(file => file.endsWith('.html'));
-                    console.log( htmlFiles.length);
+                   // console.log( htmlFiles.length);
                     if (htmlFiles.length === 0) {
                         console.log('No HTML files found in the folder');
                         return;
@@ -92,29 +85,54 @@ app.post('/savetable', (req, res) => {
                     const randomFile = htmlFiles[Math.floor(Math.random() * htmlFiles.length)];
                 
                     // 构建被删除文件的完整路径
-                    const filePath = path.join(folderPPath, randomFile);
-                
-                    // 删除文件
-                    fs.unlink(filePath, (err) => {
-                        if (err) {
+                    const filePath = path.join(pf, randomFile);
+                    if(ii>100) {
+                        try {
+                            fs.unlinkSync(filePath);
+                        //     console.log(`File "${randomFile}" has been deleted`);
+                        } catch (err) {
                             console.error('Error deleting file:', err);
                             return;
                         }
-                        console.log(`File "${randomFile}" has been deleted`);
-                    });
+                    }
+                    // 删除文件
+
                 });
                
             }
-            ii++;
-            g++;
+       
+            
             ////
             res.json({ message: 'PDF saved successfully.' });
         });
-    }
+   // }
 
     
 });
+//////////////////////,,,,,,,,,,,,,,,,,,,,,,,//////
+app.post('/saveallhtml', (req, res) => {
+    const teamateshtml = req.body.htmler;
 
+    const saveFilePath = path.join(__dirname, 'teamateshower', 'teammates.html');
+    const directoryPath = path.dirname(saveFilePath);
+    
+    // Ensure the directory exists before attempting to write the file
+    fs.mkdir(directoryPath, { recursive: true }, (err) => {
+        if (err) {
+            console.error('Error creating directory:', err);
+            return res.status(500).json({ error: 'Failed to create directory.' });
+        }
+    
+        // Now write the file
+        fs.writeFile(saveFilePath, teamateshtml, 'utf8', (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: 'Failed to save HTML.' });
+            }
+            res.json({ message: 'HTML saved successfully.' });
+        });
+    });
+});
  //////////////////////////////
  
  app.post('/showtheresult', (req, res) => {
@@ -130,7 +148,7 @@ app.post('/savetable', (req, res) => {
         const htmlFiles = files.filter(file => file.endsWith('.html'));
         // 隨機選擇一個HTML檔案
         const randomIndex = Math.floor(Math.random() * htmlFiles.length);
-        console.log( htmlFiles.length);
+       // console.log( htmlFiles.length);
       //  console.log(randomIndex);
        const randomHTMLFile = htmlFiles[randomIndex];
 
@@ -149,6 +167,7 @@ app.post('/savetable', (req, res) => {
 });
 
  //////////////////////////////////
+
 // 启动 Express 服务器
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
