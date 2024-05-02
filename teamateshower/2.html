@@ -1,9 +1,6 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="./node_modules/jspdf/dist/jspdf.umd.min.js"></script>
     <script src="./node_modules/html2canvas/dist/html2canvas.min.js"></script>
     <script src="../othercode/foldervreater.js"></script>
@@ -22,97 +19,6 @@
     <script src="/socket.io/socket.io.js"></script>
     <title>Fill Table</title>
     <link rel="stylesheet" type="text/css" href="../othercode/styles.css">
-</head>
-<body>
-    
-    <div class="switch " id="mode" >
-        <input class="switch-checkbox" id="switchID1" type="checkbox" name="switch-checkbox">
-        <label class="switch-label" for="switchID1">
-          <span class="switch-txt" turnOn="light" turnOff="dark"></span>
-          <span class="switch-Round-btn"></span>
-        </label>
-    </div>
-<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
-<div id="00" class="container00">
-    <div id="folderCreation">
-        <input type="text" id="folderName" placeholder="Enter folder name" class="folderinput"><br>
-        <button onclick="createFolder()" class="folderbutton">Create Folder</button>
-        <button onclick="" class="folderbutton">Select an existing folder</button>
-    </div>
-
-    <div id="tableSize" class="hidden">
-        <label for="rows" class="rowlabel">Rows:</label>
-        <input type="number" id="num-rows" min="1" value="1" class="roww"><br>
-        <label for="cols" class="collabel">Columns:</label>
-        <input type="number" id="num-cols" min="1" value="1" class="coll"><br>
-        <button onclick="createInputTableTo('table-container')" class="creattablebutton">
-            Create Table
-        </button>
-    </div>
-</div>
-<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
-<div id="selectthegroup" class="hidden selectthegroupcontainer">
-    <h2>select the group</h2>
-    <button id="startGrouping">start a new group</button>
-    <button id="confirmGroup" >check</button>
-    <button onclick="endingofthegroup()" id="endingofG">next step</button><br>
-    <div id="table-container"></div>
-</div>
-
-<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
-<div id="interface1" class="hidden">
-    <h6> </h6>
-    <div class="hhh transparent1 teamateinformation">
-        <h3 class="disleft">Enter Teammate Information</h3>
-        <div >
-            <label for="teammateName" class="disleft">Teammate Name:</label>
-            <input type="text" id="teammateName" class="left" width="50%" >
-        </div>
-
-    </div>
-    <div class="hhh">
-        <h6> </h6>
-        <h3 class="disleft">Upper and lower limits for the number of shifts</h3>
-        <div class="disleft">
-            <label for="inputX">lower limit:</label>
-            <input type="number" id="inputX" name="inputX" min="0" value="0" class=" left"><br>
-            <label for="inputY" >upper limit:</label>
-            <input type="number" id="inputY" name="inputY" min="1" value="100" class=" left"><br>
-        </div>
-
-        <button id="toggleButton" class="disdown disleft">going to select the blocked</button>
-        <button class="hidden disdown disleft" id="adding_teammates">add teammates</button>
-        <br/>
-           
-    
-     </div>
-
-    <p>Blocked Cells:</p>
-    
-</div>
-<div id="download">
-    <div id="another-table"></div>
-    <div id="showthepeople" class="hidden hhh teamatesbackground">
-        <div class="disleft disdown">
-            <h2>your teamates</h2>
-            <div id="teammate-list"></div>     
-        </div>
-    </div>
-    <div id="clearweirdcolor">
-        <button onclick="clearthecolor()" class="hidden" id="alittlebutton">clear the color</button>
-    </div>
-     <div id="interface3"  class="hidden">
-        <h2>Filled Table</h2>
-        <button onclick="blobloblo()" id="fill-table">Fill Table</button>
-        <button onclick="showRandomResult()" id="another" class="hidden">Show Random Result</button>
-        <table id="table"></table>
-     </div>
-</div>
-
-
-
-
-
 <script>
     const socket = io();
     socket.on('command', (cmd) => {
@@ -222,9 +128,21 @@ var mySpan = document.getElementById("mode");
 mySpan.addEventListener("change", function() {
     document.documentElement.classList.toggle("negative-effect");
 });
-</script>
-</body>
-</html>
-
-
-
+</script></head><body><div id="download">
+    <div id="another-table"><div id="table-container"><table id="teammate-table"><tbody><tr><td style="background-color: white;"><input type="text" style="width: 100%;"></td><td style="background-color: white;"><input type="text" style="width: 100%;"></td></tr></tbody></table></div></div>
+    <div id="showthepeople" class="hidden hhh teamatesbackground" style="display: block;">
+        <div class="disleft disdown">
+            <h2>your teamates</h2>
+            <div id="teammate-list"><div class="teammate-name">name:77 shift:0~100</div></div>     
+        </div>
+    </div>
+    <div id="clearweirdcolor">
+        <button onclick="clearthecolor()" class="hidden" id="alittlebutton" style="display: block;">clear the color</button>
+    </div>
+     <div id="interface3" class="hidden" style="display: block;">
+        <h2>Filled Table</h2>
+        <button onclick="blobloblo()" id="fill-table">Fill Table</button>
+        <button onclick="showRandomResult()" id="another" class="hidden">Show Random Result</button>
+        <table id="table"></table>
+     </div>
+</div></body></html>

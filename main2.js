@@ -1,16 +1,23 @@
 const express = require('express');
+const socketIo = require('socket.io');
 const app = express();
+const http = require('http');
 const fs = require('fs');
 const path = require('path');
 let ii=1;
 // 设置 Express 中间件来解析请求体中的 JSON 数据
+const server = http.createServer(app);
 app.use(express.json());
-
+const io = socketIo(server);
 // 设置根路径的 GET 请求发送到 HTML 页面
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname,'AACHAT' ,'AACHAT2.html'));
 });
 
+io.on('connection', (socket) => {
+    console.log('Client connected');
+    socket.emit('command', 'console.log("success")');
+  });
 // 设置 Express 中间件来提供静态文件
 app.use(express.static('D:/AACHAT'));
 let folderName;
@@ -192,6 +199,6 @@ app.post('/savearray', (req, res) => {
 });
 // 启动 Express 服务器
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
