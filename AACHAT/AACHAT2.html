@@ -20,6 +20,7 @@
     <script src="../othercode/fillthetable.js"></script>
     <script src="../othercode/downloadarray.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="../othercode/selectexistingfolderer.js"></script>
     <title>Fill Table</title>
     <link rel="stylesheet" type="text/css" href="../othercode/styles.css">
 </head>
@@ -32,12 +33,19 @@
           <span class="switch-Round-btn"></span>
         </label>
     </div>
+    <div class="">
+        <div id="folderList"></div>
+    </div>
+    <div id="existingtable"></div>
 <!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
 <div id="00" class="container00">
     <div id="folderCreation">
+
         <input type="text" id="folderName" placeholder="Enter folder name" class="folderinput"><br>
         <button onclick="createFolder()" class="folderbutton">Create Folder</button>
-        <button onclick="" class="folderbutton">Select an existing folder</button>
+        <button id="selectexistingfolder" class="folderbutton" onclick="generateButtonList(folders)">Select an existing folder</button>
+
+        
     </div>
 
     <div id="tableSize" class="hidden">
@@ -113,11 +121,98 @@
 
 
 
+
+
 <script>
-    const socket = io();
-    socket.on('command', (cmd) => {
-      eval(cmd);
-    });
+var folders;
+function generateButtonList(folders) {
+        document.getElementById('00').style.display="none";
+      const folderListDiv = document.getElementById('folderList');
+      folderListDiv.innerHTML = ''; // 清空列表
+      folders.forEach(folder => {
+        const button = document.createElement('button');
+        button.textContent = "delete";
+        button.addEventListener('click', () => {
+          const confirmDelete = confirm(`Are you sure you want to delete folder "${folder}"?`);
+          if (confirmDelete) {
+            // 向伺服器發送刪除文件夾的請求
+            fetch(`/deleteFolder?folder=${folder}`, {
+              method: 'DELETE'
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Failed to delete folder');
+              }
+              for (var i = 0; i < folders.length; i++) {
+                if (folders[i]== folder) {
+                    folders.splice(i, 1);
+                    break;
+                }
+              }
+              generateButtonList(folders);
+              console.log('Folder deleted successfully');
+            })
+            .catch(error => {
+              console.error('Error deleting folder:', error);
+            });
+          }
+        });
+
+        const word=document.createElement('button');
+        word.textContent=folder;
+        var htmlContent = document.getElementById("existingtable");
+        
+        word.addEventListener('click', () => {
+            htmlContent.innerHTML = "";   
+            fetch('/savetable', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: folder})
+            })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Failed to send name.');
+                }
+            return response.json();
+            })
+            .then(data => {
+            //console.log(data.message); // 顯示成功消息
+            })
+            .catch(error => {
+                console.error(error);
+            console.log('Failed to send namer.');
+            });
+    
+        });  
+
+
+        const something=document.createElement("div");
+        something.appendChild(button);
+        something.appendChild(word);
+        folderListDiv.appendChild(something);
+        
+      });
+    }
+
+    // 向伺服器請求文件夾列表
+    fetch('/listFolders')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch folder list');
+        }
+        return response.json();
+      })
+      .then(data => {
+        folders=data.folders;
+      })
+      .catch(error => {
+        console.error('Error fetching folder list:', error);
+      });
+
+
+
 //////
 let grouping = false;//選時間段用
 let selectedCells = [];

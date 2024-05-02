@@ -13,11 +13,36 @@ const io = socketIo(server);
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname,'AACHAT' ,'AACHAT2.html'));
 });
+/////////////////////////
 
-io.on('connection', (socket) => {
-    console.log('Client connected');
-    socket.emit('command', 'console.log("success")');
+app.get('/listFolders', (req, res) => {
+    const folderPath = path.join(__dirname,"allthetable"); // 指定特定資料夾的路徑
+    // 讀取資料夾內容
+    fs.readdir(folderPath, (err, files) => {
+        if (err) {
+            console.error('Error reading directory:', err);
+            return res.status(500).json({ error: 'Failed to read directory.' });
+        }
+        // 過濾出文件夾
+        const folders = files.filter(file => fs.statSync(path.join(folderPath, file)).isDirectory());
+        res.json({ folders });
+    });
+});
+app.delete('/deleteFolder', (req, res) => {
+    const folderToDelete = req.query.folder;
+     folderPath = path.join(__dirname,"allthetable");
+     folderPath = path.join(folderPath, folderToDelete); // 請替換為您的資料夾路徑
+  
+     fs.rm(folderPath, { recursive: true }, (err) => {
+        if (err) {
+          console.error('Error deleting folder:', err);
+          return res.status(500).json({ error: 'Failed to delete folder.' });
+        }
+        res.sendStatus(200);
+      });
   });
+
+  
 // 设置 Express 中间件来提供静态文件
 app.use(express.static('D:/AACHAT'));
 let folderName;
@@ -55,9 +80,9 @@ app.post('/createFolder', (req, res) => {
 app.post('/saveallhtml', (req, res) => {
     const teamateshtml = req.body.htmler;
 
-    const saveFilePath = path.join(__dirname, 'teamateshower', folderName+'.html');
-    const directoryPath = path.dirname(saveFilePath);
-    const another_path=path.join(__dirname, 'teamateshower');
+    const saveFilePath = path.join(__dirname, 'allthetable',folderName, folderName+'.html');
+   // const directoryPath = path.dirname(saveFilePath);
+    const another_path=path.join(__dirname, 'allthetable',folderName);
     // Ensure the directory exists before attempting to write the file
     fs.mkdir(another_path, { recursive: true }, (err) => {
         if (err) {
@@ -80,25 +105,16 @@ app.post('/saveallhtml', (req, res) => {
 
 app.post('/savearray', (req, res) => {
     const teamateshtml = req.body.array;
-    const saveFilePath = path.join(__dirname, 'teamateshower',  folderName+'.json');
-    const directoryPath = path.dirname(saveFilePath);
-    
-    // Ensure the directory exists before attempting to write the file
-    fs.mkdir(directoryPath, { recursive: true }, (err) => {
+    const saveFilePath = path.join(__dirname, 'allthetable',folderName,  folderName+'.json');
+   // const directoryPath = path.dirname(saveFilePath);
+    fs.writeFile(saveFilePath, teamateshtml, 'utf8', (err) => {
         if (err) {
-            console.error('Error creating directory:', err);
-            return res.status(500).json({ error: 'Failed to create directory.' });
+            console.error(err);
+            return res.status(500).json({ error: 'Failed to save json.' });
         }
-    
-        // Now write the file
-        fs.writeFile(saveFilePath, teamateshtml, 'utf8', (err) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ error: 'Failed to save HTML.' });
-            }
-            res.json({ message: 'json saved successfully.' });
-        });
+        res.json({ message: 'json saved successfully.' });
     });
+
 });
 
  //////////////////////////////
