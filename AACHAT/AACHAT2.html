@@ -20,7 +20,8 @@
     <script src="../othercode/fillthetable.js"></script>
     <script src="../othercode/downloadarray.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="../othercode/selectexistingfolderer.js"></script>
+    <script src="../othercode/addlistenerer.js"></script>
+ 
     <title>Fill Table</title>
     <link rel="stylesheet" type="text/css" href="../othercode/styles.css">
 </head>
@@ -35,8 +36,15 @@
     </div>
     <div class="">
         <div id="folderList"></div>
+        <button onclick="check()"> checlk</button>
+    <script>
+      function check() {
+        console.log(teammates);
+      }
+    </script>
     </div>
     <div id="existingtable"></div>
+    
 <!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
 <div id="00" class="container00">
     <div id="folderCreation">
@@ -164,7 +172,28 @@ function generateButtonList(folders) {
         
         word.addEventListener('click', () => {
             htmlContent.innerHTML = "";   
-            fetch('/savetable', {
+            fetch('/openexistinghtml', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: folder})
+            })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Failed to send name.');
+                }
+            return response.text();
+            })
+            .then(data => {
+              document.getElementById("existingtable").innerHTML = data;
+            })
+            .catch(error => {
+                console.error(error);
+            console.log('Failed to send namer.');
+            });
+            ///////////////
+            fetch('/openjson', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json'
@@ -178,7 +207,9 @@ function generateButtonList(folders) {
             return response.json();
             })
             .then(data => {
-            //console.log(data.message); // 顯示成功消息
+              teammates= data;
+             // console.log(data);
+              addlistener();
             })
             .catch(error => {
                 console.error(error);

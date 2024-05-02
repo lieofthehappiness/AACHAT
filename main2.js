@@ -213,6 +213,32 @@ app.post('/savearray', (req, res) => {
 
     
 });
+//////////////
+app.post('/openexistinghtml', (req, res) => {
+    const teamateshtml = req.body.name; // 假设请求体中有一个字段 name，用来指定 HTML 文件名
+    const filePath = path.join(__dirname, 'allthetable', teamateshtml, teamateshtml+'.html');
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading teamHTML file:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        res.send(data); // 发送 HTML 文件的内容
+    });
+});
+app.post('/openjson', (req, res) => {
+    const teamateshtml = req.body.name; // 假设请求体中有一个字段 name，用来指定 HTML 文件名
+    const filePath = path.join(__dirname, 'allthetable', teamateshtml, teamateshtml+'.json');
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading teamHTML file:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        res.send(data); // 发送 HTML 文件的内容
+    });
+})
+
 // 启动 Express 服务器
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
