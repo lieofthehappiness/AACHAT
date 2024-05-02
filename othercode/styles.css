@@ -1,5 +1,6 @@
 body {
     font-family: Comic Sans MS, Comic Sans, cursive;
+    background :white;
 }
 
 button {
@@ -40,9 +41,6 @@ td {
 
 }
 
-html {
-    filter: invert(100%);
-}
 
 .teammate-name {
     cursor: pointer;
@@ -175,3 +173,90 @@ html {
 .teamatesbackground {
     background-color: rgba(5, 8, 0, 0.15);
 }
+
+
+.switch {
+    position: absolute;
+width: 75px;
+height: 30px;
+line-height: 30px;
+top: 1%; /* 距离顶部的偏移量 */
+right: 1%;
+}
+.switch-checkbox {
+display: none;
+}
+
+.switch-label {
+display: block;
+overflow: hidden;
+cursor: pointer;
+border-radius: 20px;
+border: 1px solid #000000;
+}
+
+.switch-txt {
+display: block;
+width: 190%;
+margin-left: -100%;
+transition: margin 0.3s ease-in 0s;
+
+
+}
+
+.switch-txt::before,
+.switch-txt::after {
+display: block;
+float: right;
+width: 49%;
+font-size: 13px;
+color: rgb(0, 0, 0);
+font-weight: bold;
+box-sizing: border-box;
+
+}
+
+.switch-txt::after {
+content: attr(turnOn);
+padding-left: 10px;
+background: #ffffff;
+color: #000000;
+
+}
+
+.switch-txt::before {
+content: attr(turnOff);
+padding-right: 10px;
+background: #ffffff;
+color: #000000;
+text-align: right;
+
+}
+
+.switch-Round-btn {
+position: absolute;
+display: block;
+width: 26px;
+height: 26px;
+margin: 2px;
+background: #d7d7d7;
+top: 0;
+bottom: 0;
+
+border-radius: 13px;
+border-color: #000000;
+transition: all 0.3s ease-in 0s;
+}
+
+.switch-checkbox:checked + .switch-label .switch-txt {
+margin-left: 0;
+}
+
+.switch-checkbox:checked + .switch-label .switch-Round-btn{
+right: 0;
+}
+
+.negative-effect {
+    filter: invert(100%);
+}
+

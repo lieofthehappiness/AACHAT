@@ -1,5 +1,6 @@
 function blobloblo() {
     downloadHtml();
+    downloadarray()
     const table = document.getElementById("teammate-table");
     for(i=0;i<numRows;i++) {
         for(j=0;j<numCols;j++) {  

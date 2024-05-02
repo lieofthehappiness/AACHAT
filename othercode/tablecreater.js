@@ -2,6 +2,7 @@ function createInputTableTo(id) {
     document.getElementById('selectthegroup').style.display = 'block';
     document.getElementById('confirmGroup').style.display = 'none';
     document.getElementById('00').style.display = 'none';
+    let immmmm=1;
     const tableContainer = document.getElementById(id);
     if (tableContainer.firstChild) {
         tableContainer.removeChild(tableContainer.firstChild);
@@ -19,6 +20,8 @@ function createInputTableTo(id) {
         const row = document.createElement("tr");
         for (let j = 0; j < numCols; j++) {
             const cell = document.createElement("td");
+            cell.name=immmmm;
+            immmmm++;
             const input = document.createElement("input");
             input.type = "text";
             input.style.width = "100%";
@@ -46,6 +49,7 @@ function createInputTableTo(id) {
                 let index = selectedCells.indexOf(cell);
                 selectedCells.splice(index, 1);
                 cell.id='cell';
+                
             } else {
                 cell.style.backgroundColor  = currentColor;
                 selectedCells.push(cell);

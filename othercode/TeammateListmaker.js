@@ -9,23 +9,22 @@
             teammateNameElement.textContent ="name:"+teammate.name+" shift:"+teammate.shiftd+"\~"+teammate.shiftu;
             teammateNameElement.onclick = function () {
                 // Highlight blocked cells
-                highlightBlockedCells(teammate.blocked);
+                highlightBlockedCells(teammate.ineedthisarray);
             };
             teammateListContainer.appendChild(teammateNameElement);
         });
     }
-    function highlightBlockedCells(blockedCells) {
+    function highlightBlockedCells(array) {
         const table = document.getElementById("teammate-table");
         table.querySelectorAll("td").forEach((cell) => {
             cell.style.backgroundColor = ""; // Reset background color
-        });
-        blockedCells.forEach((cell) => {
-            var index = currentSelectedCells.indexOf(cell);
+            if(array.includes(cell.name)) {
+                var index = currentSelectedCells.indexOf(cell);
                 cell.style.backgroundColor = "red";
                 if(index==-1)currentSelectedCells.push(cell);
-            
-        })
-     //   blockedCells.forEach(([row, col]) => {
-           // table.rows[row].cells[col].style.backgroundColor = "gray";
-       // });
+            }
+       //     console.log(array);
+        //    console.log(cell.name);
+         //   console.log(array.includes(cell.name));
+        });
     }

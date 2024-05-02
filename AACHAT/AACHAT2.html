@@ -18,10 +18,19 @@
     <script src="../othercode/TeammateListmaker.js"></script>
     <script src="../othercode/downloadallhtmler.js"></script>
     <script src="../othercode/fillthetable.js"></script>
+    <script src="../othercode/downloadarray.js"></script>
     <title>Fill Table</title>
     <link rel="stylesheet" type="text/css" href="../othercode/styles.css">
 </head>
-<body background="../othercode/picture1.png">
+<body>
+    
+    <div class="switch " id="mode" >
+        <input class="switch-checkbox" id="switchID1" type="checkbox" name="switch-checkbox">
+        <label class="switch-label" for="switchID1">
+          <span class="switch-txt" turnOn="light" turnOff="dark"></span>
+          <span class="switch-Round-btn"></span>
+        </label>
+    </div>
 <!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
 <div id="00" class="container00">
     <div id="folderCreation">
@@ -98,7 +107,7 @@
     <button onclick="showRandomResult()" id="another" class="hidden">Show Random Result</button>
     <table id="table"></table>
 </div>
-<button id="gg">ineedto check</button>
+
 
 <script>
 
@@ -116,6 +125,7 @@ let blockedCells = [];
 let tableData = [];
 let awaysblockcell=[];
 let currentSelectedCells = [];
+let ineedthisarray=[];
 ////////////////////
 let numRows;
 let numCols;    
@@ -168,13 +178,15 @@ document.getElementById("adding_teammates").addEventListener("click", function()
         shiftd=document.getElementById("inputX").value;
         shiftu=document.getElementById("inputY").value;
         let shiftnow=0;
-        // get the selected cells and set the backgroundColor to white
         currentSelectedCells.forEach((cell) => {
             cell.style.backgroundColor = "";
+            ineedthisarray.push(cell.name);
         });
         const blocked = currentSelectedCells;
         currentSelectedCells = [];
-        teammates.push({ name, blocked ,shiftd,shiftu,shiftnow});
+        teammates.push({ name, blocked ,shiftd,shiftu,shiftnow,ineedthisarray});
+        console.log(teammates);
+        ineedthisarray=[];
       //  console.log(teammates);
       //  console.log(typeof teammates[0].blocked[0]);
         // Clear teammate name input
@@ -198,7 +210,11 @@ peopleDivs.forEach(function(div) {
 function anotherblockshoudbeshow() {
     document.getElementById("another").style.display="block";
 }
-
+////////////////////
+var mySpan = document.getElementById("mode");
+mySpan.addEventListener("change", function() {
+    document.documentElement.classList.toggle("negative-effect");
+});
 </script>
 </body>
 </html>
