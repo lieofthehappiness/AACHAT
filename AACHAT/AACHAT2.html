@@ -1,0 +1,352 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="../othercode/foldervreater.js"></script>
+    <script src="../othercode/clearthecolorer.js"></script>
+    <script src="../othercode/Teammateadder.js"></script>
+    <script src="../othercode/awaysblocker.js"></script>
+    <script src="../othercode/tablecreater.js"></script>
+    <script src="../othercode/generater.js"></script>
+    <script src="../othercode/generateUniqueColorer.js"></script>
+    <script src="../othercode/endingofthegrouper.js"></script>
+    <script src="../othercode/showtheresulter.js"></script>
+    <script src="../othercode/TeammateListmaker.js"></script>
+    <script src="../othercode/downloadallhtmler.js"></script>
+    <script src="../othercode/fillthetable.js"></script>
+    <script src="../othercode/downloadarray.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../othercode/addlistenerer.js"></script>
+ 
+    <title>Fill Table</title>
+    <link rel="stylesheet" type="text/css" href="../othercode/styles.css">
+</head>
+<body>
+    
+    <div class="switch " id="mode" >
+        <input class="switch-checkbox" id="switchID1" type="checkbox" name="switch-checkbox">
+        <label class="switch-label" for="switchID1">
+          <span class="switch-txt" turnOn="light" turnOff="dark"></span>
+          <span class="switch-Round-btn"></span>
+        </label>
+    </div>
+    <div class="">
+        <div id="folderList"></div>
+    </div>
+    <div id="existingtable"></div>
+    
+<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
+<div id="00" class="container00">
+    <div id="folderCreation">
+
+        <input type="text" id="folderName" placeholder="Enter folder name" class="folderinput"><br>
+        <button onclick="createFolder()" class="folderbutton">Create Folder</button>
+        <button id="selectexistingfolder" class="folderbutton" onclick="generateButtonList(folders)">Select an existing folder</button>
+
+        
+    </div>
+
+    <div id="tableSize" class="hidden">
+        <label for="rows" class="rowlabel">Rows:</label>
+        <input type="number" id="num-rows" min="1" value="1" class="roww"><br>
+        <label for="cols" class="collabel">Columns:</label>
+        <input type="number" id="num-cols" min="1" value="1" class="coll"><br>
+        <button onclick="createInputTableTo('table-container')" class="creattablebutton">
+            Create Table
+        </button>
+    </div>
+</div>
+<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
+<div id="selectthegroup" class="hidden selectthegroupcontainer">
+    <h2>select the group</h2>
+    <button id="startGrouping">start a new group</button>
+    <button id="confirmGroup" >check</button>
+    <button onclick="endingofthegroup()" id="endingofG">next step</button><br>
+    <div id="table-container"></div>
+</div>
+
+<!--nwrjgb2pirbg2pirbgp2ib2piub2pi4ubp2ibvpjvfnvs-->
+<div id="interface1" class="hidden">
+    <h6> </h6>
+    <div class="hhh transparent1 teamateinformation">
+        <h3 class="disleft">Enter Teammate Information</h3>
+        <div >
+            <label for="teammateName" class="disleft">Teammate Name:</label>
+            <input type="text" id="teammateName" class="left" width="50%" >
+        </div>
+
+    </div>
+    <div class="hhh">
+        <h6> </h6>
+        <h3 class="disleft">Upper and lower limits for the number of shifts</h3>
+        <div class="disleft">
+            <label for="inputX">lower limit:</label>
+            <input type="number" id="inputX" name="inputX" min="0" value="0" class=" left"><br>
+            <label for="inputY" >upper limit:</label>
+            <input type="number" id="inputY" name="inputY" min="1" value="100" class=" left"><br>
+        </div>
+
+        <button id="toggleButton" class="disdown disleft">going to select the blocked</button>
+        <button class="hidden disdown disleft" id="adding_teammates">add teammates</button>
+        <br/>
+           
+    
+     </div>
+
+    <p>Blocked Cells:</p>
+    
+</div>
+<div id="download">
+    <div id="another-table"></div>
+    <div id="showthepeople" class="hidden hhh teamatesbackground">
+        <div class="disleft disdown">
+            <h2>your teamates</h2>
+            <div id="teammate-list"></div>     
+        </div>
+    </div>
+    <div id="clearweirdcolor">
+        <button onclick="clearthecolor()" class="hidden" id="alittlebutton">clear the color</button>
+    </div>
+     <div id="interface3" class="hidden hhh k">
+        
+        <div class="disleft disdown">
+          <h3>Filled Table</h3>
+          <button onclick="blobloblo()" id="fill-table">Fill Table</button>
+          <button onclick="showRandomResult() " id="another" class="hidden ">Show Random Result</button>
+          <button onclick="showexistingResult()" id="another2" class="hidden ">Show Random Result</button>
+          <table id="table"></table>
+        </div>
+
+     </div>
+</div>
+
+
+
+
+
+
+
+<script>
+var folders;
+var nowfolder;
+function generateButtonList(folders) {
+        document.getElementById('00').style.display="none";
+        document.getElementById("fill-table").style.display="none";
+      const folderListDiv = document.getElementById('folderList');
+      folderListDiv.innerHTML = ''; // 清空列表
+      folders.forEach(folder => {
+       // console.log(typeof(folder));
+        
+        const button = document.createElement('button');
+        button.textContent = "delete";
+        button.addEventListener('click', () => {
+          const confirmDelete = confirm(`Are you sure you want to delete folder "${folder}"?`);
+          if (confirmDelete) {
+            // 向伺服器發送刪除文件夾的請求
+            fetch(`/deleteFolder?folder=${folder}`, {
+              method: 'DELETE'
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Failed to delete folder');
+              }
+              for (var i = 0; i < folders.length; i++) {
+                if (folders[i]== folder) {
+                    folders.splice(i, 1);
+                    break;
+                }
+              }
+              generateButtonList(folders);
+              console.log('Folder deleted successfully');
+            })
+            .catch(error => {
+              console.error('Error deleting folder:', error);
+            });
+          }
+        });
+
+        const word=document.createElement('button');
+        word.textContent=folder;
+        var htmlContent = document.getElementById("existingtable");
+        
+        word.addEventListener('click', () => {
+          nowfolder=folder;
+          console.log(nowfolder);
+            htmlContent.innerHTML = "";   
+            fetch('/openexistinghtml', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: folder})
+            })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Failed to send name.');
+                }
+            return response.text();
+            })
+            .then(data => {
+      
+              document.getElementById("existingtable").innerHTML = data;
+            })
+            .catch(error => {
+                console.error(error);
+            console.log('Failed to send namer.');
+            });
+            ///////////////
+            fetch('/openjson', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: folder})
+            })
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Failed to send name.');
+                }
+            return response.json();
+            })
+            .then(data => {
+              teammates= data;
+             // console.log(data);
+              addlistener();
+            })
+            .catch(error => {
+                console.error(error);
+            console.log('Failed to send namer.');
+            });
+    
+        });  
+
+
+        const something=document.createElement("div");
+        something.appendChild(button);
+        something.appendChild(word);
+        folderListDiv.appendChild(something);
+        
+      });
+    }
+
+    // 向伺服器請求文件夾列表
+    fetch('/listFolders')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch folder list');
+        }
+        return response.json();
+      })
+      .then(data => {
+        folders=data.folders;
+      })
+      .catch(error => {
+        console.error('Error fetching folder list:', error);
+      });
+
+
+
+//////
+let grouping = false;//選時間段用
+let selectedCells = [];
+let donottouchcells=[];
+let usedColors = ["#FFFFFF"];
+let currentColor = "";
+let timegroup=[];
+///////////////////////////////////
+let isToggling=false; //選block用
+let teammates = [];//
+let blockedCells = [];
+let tableData = [];
+let awaysblockcell=[];
+let currentSelectedCells = [];
+let ineedthisarray=[];
+////////////////////
+let numRows;
+let numCols;    
+let shiftd;
+let shiftu;
+/////////////
+document.getElementById("startGrouping").addEventListener("click", function() {
+    grouping = true;
+    selectedCells = [];
+    currentColor = generateUniqueColor();
+    document.getElementById('confirmGroup').style.display = 'inline-block'; 
+    document.getElementById('startGrouping').style.display = 'none';
+    document.getElementById('endingofG').style.display = 'none';
+  //  usedColors.push(currentColor);
+})
+let iiii=0;
+document.getElementById("confirmGroup").addEventListener("click", function() {
+    grouping = false;
+    document.getElementById('confirmGroup').style.display = 'none'; 
+    document.getElementById('startGrouping').style.display = 'inline-block';
+    document.getElementById('endingofG').style.display = 'inline-block';
+    timegroup.push(selectedCells);
+    donottouchcells.push.apply(donottouchcells,selectedCells);
+    iiii++;
+    selectedCells = [];
+});
+///////////
+document.getElementById("toggleButton").addEventListener("click", function() {
+    const nameInput = document.getElementById("teammateName");
+    const name = nameInput.value;
+    if (!name) {
+         alert("please enter the name ");
+        return;
+     }
+    document.getElementById('toggleButton').style.display = 'none';
+    document.getElementById('adding_teammates').style.display = 'block'; 
+    isToggling=true;
+   // console.log(isToggling);
+    
+});
+///////////////////////////////////////////////////
+document.getElementById("adding_teammates").addEventListener("click", function() {
+    const nameInput = document.getElementById("teammateName");
+        isToggling=false;
+        document.getElementById('toggleButton').style.display='block'; 
+        document.getElementById('interface3').style.display='block'; 
+        document.getElementById('showthepeople').style.display='block'; 
+        document.getElementById('adding_teammates').style.display='none'; 
+        const name = nameInput.value;
+        shiftd=document.getElementById("inputX").value;
+        shiftu=document.getElementById("inputY").value;
+        let shiftnow=0;
+        currentSelectedCells.forEach((cell) => {
+            cell.style.backgroundColor = "";
+            ineedthisarray.push(cell.name);
+        });
+        const blocked = currentSelectedCells;
+        currentSelectedCells = [];
+        teammates.push({ name, blocked ,shiftd,shiftu,shiftnow,ineedthisarray});
+        console.log(teammates);
+        ineedthisarray=[];
+      //  console.log(teammates);
+      //  console.log(typeof teammates[0].blocked[0]);
+        // Clear teammate name input
+        nameInput.value = "";
+        // Update teammate list
+         document.getElementById("teammateName").value = "";//清空input
+         document.getElementById("teammateName").innerHTML = "";//清空畫面文字
+        updateTeammateList();
+});
+////
+
+////////////////////////////////////////////
+function anotherblockshoudbeshow() {
+    document.getElementById("another").style.display="block";
+}
+////////////////////
+var mySpan = document.getElementById("mode");
+mySpan.addEventListener("change", function() {
+    document.documentElement.classList.toggle("negative-effect");
+});
+</script>
+</body>
+</html>
+
+
+
