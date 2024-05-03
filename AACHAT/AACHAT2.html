@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="./node_modules/jspdf/dist/jspdf.umd.min.js"></script>
-    <script src="./node_modules/html2canvas/dist/html2canvas.min.js"></script>
     <script src="../othercode/foldervreater.js"></script>
     <script src="../othercode/clearthecolorer.js"></script>
     <script src="../othercode/Teammateadder.js"></script>
@@ -36,12 +34,6 @@
     </div>
     <div class="">
         <div id="folderList"></div>
-        <button onclick="check()"> checlk</button>
-    <script>
-      function check() {
-        console.log(teammates);
-      }
-    </script>
     </div>
     <div id="existingtable"></div>
     
@@ -117,11 +109,16 @@
     <div id="clearweirdcolor">
         <button onclick="clearthecolor()" class="hidden" id="alittlebutton">clear the color</button>
     </div>
-     <div id="interface3"  class="hidden">
-        <h2>Filled Table</h2>
-        <button onclick="blobloblo()" id="fill-table">Fill Table</button>
-        <button onclick="showRandomResult()" id="another" class="hidden">Show Random Result</button>
-        <table id="table"></table>
+     <div id="interface3" class="hidden hhh k">
+        
+        <div class="disleft disdown">
+          <h3>Filled Table</h3>
+          <button onclick="blobloblo()" id="fill-table">Fill Table</button>
+          <button onclick="showRandomResult() " id="another" class="hidden ">Show Random Result</button>
+          <button onclick="showexistingResult()" id="another2" class="hidden ">Show Random Result</button>
+          <table id="table"></table>
+        </div>
+
      </div>
 </div>
 
@@ -133,11 +130,14 @@
 
 <script>
 var folders;
+var nowfolder;
 function generateButtonList(folders) {
         document.getElementById('00').style.display="none";
       const folderListDiv = document.getElementById('folderList');
       folderListDiv.innerHTML = ''; // 清空列表
       folders.forEach(folder => {
+       // console.log(typeof(folder));
+        
         const button = document.createElement('button');
         button.textContent = "delete";
         button.addEventListener('click', () => {
@@ -171,6 +171,8 @@ function generateButtonList(folders) {
         var htmlContent = document.getElementById("existingtable");
         
         word.addEventListener('click', () => {
+          nowfolder=folder;
+          console.log(nowfolder);
             htmlContent.innerHTML = "";   
             fetch('/openexistinghtml', {
             method: 'POST',
@@ -186,6 +188,7 @@ function generateButtonList(folders) {
             return response.text();
             })
             .then(data => {
+      
               document.getElementById("existingtable").innerHTML = data;
             })
             .catch(error => {
@@ -330,15 +333,7 @@ document.getElementById("adding_teammates").addEventListener("click", function()
         updateTeammateList();
 });
 ////
-var peopleDivs = document.querySelectorAll('.teammate-table');
 
-peopleDivs.forEach(function(div) {
-    div.addEventListener('click', function() {
-        teammateNameElement.onclick = function () {
-                highlightBlockedCells(teammate.blocked);
-            };
-    });
-});
 ////////////////////////////////////////////
 function anotherblockshoudbeshow() {
     document.getElementById("another").style.display="block";

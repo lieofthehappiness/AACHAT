@@ -149,7 +149,39 @@ app.post('/savearray', (req, res) => {
         });
     });
 });
+///////////////
+app.post('/showexistingResult', (req, res) => {
+    var x=req.body.name;
+    console.log(x);
+    const tableFolderPath = path.join(__dirname,'allthetable',x, 'table');
+    console.log(tableFolderPath);
+    fs.readdir(tableFolderPath, (err, files) => {
+        if (err) {
+            console.error('Error reading directory:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        // 篩選出HTML檔案
+        const htmlFiles = files.filter(file => file.endsWith('.html'));
+        // 隨機選擇一個HTML檔案
+        const randomIndex = Math.floor(Math.random() * htmlFiles.length);
+       // console.log( htmlFiles.length);
+      //  console.log(randomIndex);
+       const randomHTMLFile = htmlFiles[randomIndex];
 
+        // 讀取HTML檔案的內容並回傳給客戶端
+        fs.readFile(path.join(tableFolderPath, randomHTMLFile), 'utf8', (err, data) => {
+            if (err) {
+                console.error('Error reading HTML file:', err);
+                res.status(500).send('Internal Server Error');
+                return;
+            }
+           // console.log("MAYBE");
+            // 回傳HTML檔案的內容給客戶端
+            res.send(data);
+        });
+    });
+});
  //////////////////////////////////
  app.post('/savetable', (req, res) => {
     const pdfData = req.body.pdfData;
@@ -159,11 +191,11 @@ app.post('/savearray', (req, res) => {
   //  console.log(folderpath);
     let notimportantnumber=1;
     if(ii>100) {
-        notimportantnumber=Math.floor(Math.random() * 2);
+        notimportantnumber=1+Math.floor(Math.random() * (ii/100));
     }
-  // console.log(notimportantnumber+"  "+ii);
+   console.log(notimportantnumber+"  "+ii);
    
-   // if(notimportantnumber==1) {
+    if(notimportantnumber==1) {
         fs.writeFile(pdfFilePath, pdfData,'utf8', (err) => {
             if (err) {
                 console.error(err);
@@ -209,8 +241,8 @@ app.post('/savearray', (req, res) => {
             ////
             res.json({ message: 'PDF saved successfully.' });
         });
-   // }
-
+    }
+    else res.json({ message: 'PDF continue.' });
     
 });
 //////////////
