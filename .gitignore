@@ -1,6 +1,8 @@
+open2.txt
+next_step.txt
+#
 allthetable/
-/OPEN.txt
-/next step.txt
+
 # Logs
 logs
 *.log

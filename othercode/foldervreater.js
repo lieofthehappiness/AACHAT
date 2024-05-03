@@ -5,8 +5,7 @@ function createFolder() {
         alert("Please enter a folder name.");
         return;
     }
-    document.getElementById("tableSize").style.display=("block");
-    document.getElementById("folderCreation").style.display=("none");
+
     fetch('/createFolder', {
         method: 'POST',
         headers: {
@@ -17,14 +16,20 @@ function createFolder() {
     .then(response => {
         if (!response.ok) {
             throw new Error('Failed to create folder.');
+            
         }
         return response.json();
     })
     .then(data => {
+        
+    document.getElementById("tableSize").style.display=("block");
+    document.getElementById("folderCreation").style.display=("none");
         console.log(data.message); // 显示成功消息
     })
     .catch(error => {
         console.error(error);
+        t=true;
         alert('Failed to create folder.');
     });
+
 }
