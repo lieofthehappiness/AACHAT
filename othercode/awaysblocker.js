@@ -1,6 +1,5 @@
 function blobloblo() {
-    downloadHtml();
-    downloadarray()
+
     document.getElementById("fill-table").style.display="none";
     const table = document.getElementById("teammate-table");
     for(i=0;i<numRows;i++) {
@@ -14,7 +13,8 @@ function blobloblo() {
         }
     }
     
-    
+    downloadHtml();
+    downloadarray();
   // console.log(awaysblockcell);
     fillTable(0,0);
 
