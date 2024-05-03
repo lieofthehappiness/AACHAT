@@ -8,8 +8,7 @@ function addlistener() {
         cell.name=immmm;
         immmm++;
     })
-    document.getElementById("another2").style.display="block";
-    document.getElementById("fill-table").style.display="none";
+    
     teammates.forEach((teammate, index) => {
       //  console.log("F00")
         const teammateNameElement = document.createElement("div");
@@ -23,6 +22,8 @@ function addlistener() {
         };
         teammateListContainer.appendChild(teammateNameElement);
     });
+    document.getElementById("another2").style.display="block";
+    document.getElementById("fill-table").style.display="none";
 
 }
 

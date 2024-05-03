@@ -133,6 +133,7 @@ var folders;
 var nowfolder;
 function generateButtonList(folders) {
         document.getElementById('00').style.display="none";
+        document.getElementById("fill-table").style.display="none";
       const folderListDiv = document.getElementById('folderList');
       folderListDiv.innerHTML = ''; // 清空列表
       folders.forEach(folder => {

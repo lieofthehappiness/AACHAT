@@ -193,7 +193,7 @@ app.post('/showexistingResult', (req, res) => {
     if(ii>100) {
         notimportantnumber=1+Math.floor(Math.random() * (ii/100));
     }
-   console.log(notimportantnumber+"  "+ii);
+ //  console.log(notimportantnumber+"  "+ii);
    
     if(notimportantnumber==1) {
         fs.writeFile(pdfFilePath, pdfData,'utf8', (err) => {
